@@ -15,17 +15,6 @@ SPACE to select.
 ESC to exit.
 ```
 
-```
- ○ ○ ○ ○ ○ ○ ○ 
- ○ ○ ○ ● ○ ○ ○ 
- ○ ○ ● ◍ ○ ○ ○ 
- ◍ ● ◍ ● ○ ○ ○ 
- ● ◍ ◍ ◍ ● ○ ○ 
- ● ◍ ◍ ● ● ◍ ● 
-
-   WINNER: ●
-```
-
 # TODO:
 
 * Add input to take in move and push to the board.
