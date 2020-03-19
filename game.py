@@ -5,11 +5,11 @@ from bitmap import Bitmap
 
 class Game(object):
     def __init__(self, blank=True):
-        self.board = np.zeros((6,7), dtype=int) if blank else self.load_random_game()
+        self.board = np.zeros((6,7), dtype=int)
         self.moves = []
         self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
         self.players = {1:"RED", -1:"YELLOW"}
-        if not blank: self.check_winner()
+        if not blank: self.load_random_game()
 
     def reset_game(self):
         self.board = np.zeros((6,7), dtype=int)
@@ -23,17 +23,25 @@ class Game(object):
         return 0
 
     def load_random_game(self):
-        with open('data/c4_game_database.csv', newline='') as file:
+        with open('custom-datasets/test-output-moves.csv', newline='') as file:
             reader = csv.reader(file)
-            file.seek(random.randrange(376641))
+            file.seek(random.randrange(80000))
             file.readline()
             random_game = file.readline()
             if len(random_game) == 0:
                 f.seek(0)
                 random_game = f.readline()
-            random_game = np.asarray([int(float(i)) for i in random_game.split(',')[:-1]])
-            random_game = np.reshape(random_game, (-1,7))
-        return random_game
+            # random_game = np.asarray([int(float(i)) for i in random_game.split(',')[:-1]])
+            # random_game = np.reshape(random_game, (-1,7))
+        # return random_game
+
+        turn = int(random_game.split(',')[-1].replace('\r\n', ''))
+        moves = random_game.split(',')[:-1]
+        moves = [list(map(int, list(i))) for i in moves]
+        for place in moves:
+            res = self.push_piece([place,turn])
+            if res != 0: self.draw_board(place, turn, res)
+            turn = -1 if turn == 1 else 1
 
     def check_next_column(self, cursor, direction):
         skip = True
