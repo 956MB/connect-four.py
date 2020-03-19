@@ -17,7 +17,9 @@ def play_terminal():
                 cursor = rspot
                 four.draw_board(cursor, turn)
             elif k == 'space':
-                four.push_piece([cursor,turn])
+                win = four.push_piece([cursor,turn])
+                if win != 0:
+                    four.draw_board(cursor, turn, win)
                 four.draw_board(cursor, turn)
                 turn = -1 if turn == 1 else 1
             elif k == 'esc':

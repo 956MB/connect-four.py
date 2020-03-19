@@ -11,10 +11,16 @@ class Game(object):
         self.players = {1:"RED", -1:"YELLOW"}
         if not blank: self.check_winner()
 
+    def reset_game(self):
+        self.board = np.zeros((6,7), dtype=int)
+        self.moves = []
+
     def push_piece(self, piece):
         self.board[piece[0][0]][piece[0][1]] = piece[1]
         self.moves.append(tuple(piece[0]))
-        self.check_winner()
+        win = self.check_winner()
+        if win != 0: return win
+        return 0
 
     def load_random_game(self):
         with open('data/c4_game_database.csv', newline='') as file:
@@ -51,22 +57,24 @@ class Game(object):
 
     def check_winner(self):
         winner = Bitmap(self.board.flatten()).check_winner()
-        if winner != 0:
-            self.draw_board(winner=winner)
-            print("\n   WINNER: {}\n".format(self.pieces[winner]))
-            sys.exit()
+        if winner != 0: return winner
+        return 0
 
-    def out_csv(self):
-        flat_board = self.board.flatten()
+    def out_csv(self, winner):
+        # flat_board = self.board.flatten()
         flat_moves = [''.join(list(map(str, list(i)))) for i in self.moves]
 
-        with open('custom-datasets/test-output-board.csv', 'a', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(flat_board)
+        # with open('custom-datasets/test-output-board.csv', 'a', newline='') as csvfile:
+            # np.append(flat_board, winner)
+            # writer = csv.writer(csvfile)
+            # writer.writerow(flat_board)
+            # print("board written to custom-datasets/test-output-board.csv")
 
         with open('custom-datasets/test-output-moves.csv', 'a', newline='') as csvfile:
+            flat_moves.append(winner)
             writer = csv.writer(csvfile)
             writer.writerow(flat_moves)
+            print("moves written to custom-datasets/test-output-moves.csv")
 
     def draw_board(self, cursor=[5,0], turn=1, winner=None):
         os.system('clear')
@@ -88,3 +96,6 @@ class Game(object):
             print("\n ⭠  ⭢  to move.")
             print(" SPACE to select.")
             print(" ESC to exit.\n")
+        else:
+            print("\n   WINNER: {}\n".format(self.pieces[winner]))
+            sys.exit()
