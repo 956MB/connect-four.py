@@ -7,8 +7,8 @@ class Game(object):
     def __init__(self, blank=True):
         self.board = np.zeros((6,7), dtype=int) if blank else self.load_random_game()
         self.moves = []
-        self.blocks = {0:f"{Fore.WHITE}{Style.DIM}█{Style.RESET_ALL}", 1:f"{Fore.RED}█{Style.RESET_ALL}", -1:f"{Fore.YELLOW}█{Style.RESET_ALL}"}
-        self.players = {1:"\033[91mRED\033[00m", -1:"\033[93mYELLOW\033[00m"}
+        self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
+        self.players = {1:"RED", -1:"YELLOW"}
         if not blank: self.check_winner()
 
     def push_piece(self, piece):
@@ -53,14 +53,12 @@ class Game(object):
         winner = Bitmap(self.board.flatten()).check_winner()
         if winner != 0:
             self.draw_board(winner=winner)
-            print("\n {} has won!\n GAME OVER!\n".format(self.players[winner]))
+            print("\n   WINNER: {}\n".format(self.pieces[winner]))
             sys.exit()
 
     def out_csv(self):
         flat_board = self.board.flatten()
         flat_moves = [''.join(list(map(str, list(i)))) for i in self.moves]
-        # print(flat_moves)
-        # flat_moves = np.array(self.moves).flatten()
 
         with open('custom-datasets/test-output-board.csv', 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
@@ -76,14 +74,14 @@ class Game(object):
         else: print()
 
         for row_index, row in enumerate(self.board):
-            print(" |", end = "")
+            print(" ", end="")
             for col_index, item in enumerate(row):
                 current = [row_index, col_index]
                 if current == cursor:
-                    if winner: print(self.blocks[item], end="|")
-                    else: print(self.blocks[1], end = "|") if turn == 1 else print(self.blocks[-1], end = "|")
+                    if winner: print("{}".format(self.pieces[item]), end=" ")
+                    else: print("{}".format(self.pieces[1]), end=" ") if turn == 1 else print(self.pieces[-1], end=" ")
                 else:
-                    print(self.blocks[item], end = "|")
+                    print("{}".format(self.pieces[item]), end=" ")
             print()
 
         if winner is None:
