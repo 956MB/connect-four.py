@@ -16,7 +16,6 @@ ESC to exit.
 ```
 
 ```
- 
  ○ ○ ○ ○ ○ ○ ○ 
  ○ ○ ○ ● ○ ○ ○ 
  ○ ○ ● ◍ ○ ○ ○ 
@@ -25,7 +24,6 @@ ESC to exit.
  ● ◍ ◍ ● ● ◍ ● 
 
    WINNER: ●
-
 ```
 
 # TODO:
@@ -35,7 +33,7 @@ ESC to exit.
 
 # Looks:
 
-<img width="900" src="https://raw.githubusercontent.com/Bloumbs/nn-connect-four/master/screenshots/looks.png">
+<img width="900" src="https://github.com/Bloumbs/nn-connect-four/blob/master/screenshots/looks.png">
 
 ```
 this is nothing
