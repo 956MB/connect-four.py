@@ -46,6 +46,8 @@ def getkey():
                 67: 'right'
             }
             return key_mapping.get(k, chr(k))
+    except Exception:
+        sys.exit()
     finally:
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
@@ -65,10 +67,12 @@ if __name__ == '__main__':
             help="log moves of game to logs/")
     ap._action_groups.append(opt)
     args = vars(ap.parse_args())
-    mode, path = True, None
+    mode, path, sep = True, None, " "
+    seperators = {1:" ", 2:"|", 3:"("}
+    cursor, turn = [5,0], random.choice([-1, 1])
 
+    if args["style"]: sep = seperators[args["style"]]
     if args["dataset"]: mode, path = False, args["dataset"]
 
-    cursor, turn = [5,0], random.choice([-1, 1])
-    four = Game(blank=mode, load=path)
+    four = Game(blank=mode, load=path, sep=sep)
     play_terminal()

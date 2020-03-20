@@ -4,12 +4,13 @@ from colorama import Fore, Style
 from bitmap import Bitmap
 
 class Game(object):
-    def __init__(self, blank=True, load=None):
+    def __init__(self, blank=True, load=None, sep=" "):
         self.board = np.zeros((6,7), dtype=int)
-        self.moves = []
-        self.load = load
+        self.moves, self.load = [], load
         self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
-        self.players = {1:"RED", -1:"YELLOW"}
+        if sep == " ": self.front, self.middle, self.back = "", " ", ""
+        elif sep == "|": self.front, self.middle, self.back = " {}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL), "", "{}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL)
+        elif sep == "(": self.front, self.middle, self.back = " ", "{}{}{}".format(Fore.BLUE, "(", Style.RESET_ALL), "{}{}{}".format(Fore.BLUE, ")", Style.RESET_ALL)
         if not blank: self.load_random_game()
 
     def reset_game(self):
@@ -90,14 +91,14 @@ class Game(object):
         print()
 
         for row_index, row in enumerate(self.board):
-            print(" ", end="")
+            print("{}".format(self.front), end="")
             for col_index, item in enumerate(row):
                 current = [row_index, col_index]
                 if current == cursor:
-                    if winner: print("{}".format(self.pieces[item]), end=" ")
-                    else: print("{}".format(self.pieces[1]), end=" ") if turn == 1 else print(self.pieces[-1], end=" ")
+                    if winner: print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
+                    else: print("{}{}".format(self.middle, self.pieces[1]), end="{}".format(self.back)) if turn == 1 else print("{}{}".format(self.middle, self.pieces[-1]), end="{}".format(self.back))
                 else:
-                    print("{}".format(self.pieces[item]), end=" ")
+                    print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
             print()
 
         if winner is None:
