@@ -4,9 +4,10 @@ from colorama import Fore, Style
 from bitmap import Bitmap
 
 class Game(object):
-    def __init__(self, blank=True):
+    def __init__(self, blank=True, load=None):
         self.board = np.zeros((6,7), dtype=int)
         self.moves = []
+        self.load = load
         self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
         self.players = {1:"RED", -1:"YELLOW"}
         if not blank: self.load_random_game()
@@ -23,7 +24,7 @@ class Game(object):
         return 0
 
     def load_random_game(self):
-        with open('custom-datasets/test-output-moves.csv', newline='') as file:
+        with open(self.load, newline='') as file:
             reader = csv.reader(file)
             file.seek(random.randrange(80000))
             file.readline()
@@ -68,7 +69,7 @@ class Game(object):
         if winner != 0: return winner
         return 0
 
-    def out_csv(self, winner):
+    def out_csv(self, winner, path):
         # flat_board = self.board.flatten()
         flat_moves = [''.join(list(map(str, list(i)))) for i in self.moves]
 
@@ -86,8 +87,7 @@ class Game(object):
 
     def draw_board(self, cursor=[5,0], turn=1, winner=None):
         os.system('clear')
-        if winner is None: print("\n Cursor: {}\n".format(cursor))
-        else: print()
+        print()
 
         for row_index, row in enumerate(self.board):
             print(" ", end="")

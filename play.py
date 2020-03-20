@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from game import Game
 import sys, random, tty, os, termios
+import argparse
 
 def play_terminal():
     global cursor,turn
@@ -49,6 +50,25 @@ def getkey():
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 if __name__ == '__main__':
+    ap = argparse.ArgumentParser()
+    opt = ap._action_groups.pop()
+    req = ap.add_argument_group('required arguments')
+    opt.add_argument("-n","--net",action="store_true",
+            help="play against trained neural net")
+    opt.add_argument("-d","--dataset",
+            help="path to .csv moves dataset to load random game")
+    opt.add_argument("-s","--style",const=1,type=int,choices=range(1,4),nargs="?",
+            help="style of Connect Four game. 1, 2 or 3.")
+    opt.add_argument("-i","--inputmode",action="store_true",
+            help="play game with input mode rather than with arrow key movement")
+    opt.add_argument("-l","--log",action="store_true",
+            help="log moves of game to logs/")
+    ap._action_groups.append(opt)
+    args = vars(ap.parse_args())
+    mode, path = True, None
+
+    if args["dataset"]: mode, path = False, args["dataset"]
+
     cursor, turn = [5,0], random.choice([-1, 1])
-    four = Game(blank=True)
+    four = Game(blank=mode, load=path)
     play_terminal()
