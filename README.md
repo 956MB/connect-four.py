@@ -37,7 +37,7 @@ optional arguments:
 * Add input to take in move and push to the board.
 * Add optional looks for the game (see below).
 * Finish implementing argument features for play.py:
-    * --net, --style, --inputmode, --log
+    * --net, --inputmode, --log
 
 # Looks:
 
