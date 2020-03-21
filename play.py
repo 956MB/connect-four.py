@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 from game import Game
+from datetime import datetime
 import sys, random, tty, os, termios
 import argparse
 
-def play_terminal():
+def play_console():
     global cursor,turn
     four.draw_board(cursor, turn)
     try:
@@ -20,6 +21,10 @@ def play_terminal():
             elif k == 'space':
                 win = four.push_piece([cursor,turn])
                 if win != 0:
+                    if args["log"]:
+                        now = datetime.now()
+                        timestring = now.strftime("%m-%d-%Y-%H%M%S-moves")
+                        four.out_csv(win, "logs/{}.csv".format(timestring), "w")
                     four.draw_board(cursor, turn, win)
                 four.draw_board(cursor, turn)
                 turn = -1 if turn == 1 else 1
@@ -67,12 +72,12 @@ if __name__ == '__main__':
             help="log moves of game to logs/")
     ap._action_groups.append(opt)
     args = vars(ap.parse_args())
+
     mode, path, sep = True, None, " "
     seperators = {1:" ", 2:"|", 3:"("}
     cursor, turn = [5,0], random.choice([-1, 1])
-
     if args["style"]: sep = seperators[args["style"]]
     if args["dataset"]: mode, path = False, args["dataset"]
 
-    four = Game(blank=mode, load=path, sep=sep)
-    play_terminal()
+    four = Game(mode=mode, load=path, sep=sep, starter=turn)
+    play_console()
