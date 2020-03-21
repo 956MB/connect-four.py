@@ -4,6 +4,7 @@ import random
 
 def generate_game(games=1):
     global cursor,turn
+    save_path = "custom-datasets/test-output-moves.csv"
 
     for i in range(games):
         for _ in range(42):
@@ -16,12 +17,12 @@ def generate_game(games=1):
                 break
             turn = -1 if turn == 1 else 1
 
-        print("game {} ".format(i), end="")
-        four.out_csv(res)
-        four.reset_game()
-        cursor = [5,0]
+        print("game {} logged to {}".format(i, save_path))
+        four.out_csv(res, save_path, "a")
+        cursor, turn = [5,0], random.choice([-1, 1])
+        four.reset_game(turn)
 
 if __name__ == '__main__':
     cursor, turn, res = [5,0], random.choice([-1, 1]), 0
-    four = Game(blank=True)
-    generate_game(10000)
+    four = Game(mode=True, starter=turn)
+    generate_game(10)
