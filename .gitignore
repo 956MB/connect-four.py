@@ -4,6 +4,8 @@ __pycache__/
 .DS_Store
 custom-datasets/*
 data/*
+logs/*
 !data/.gitkeep
 !custom-datasets/.gitkeep
+!logs/.gitkeep
 train.py
