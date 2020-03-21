@@ -32,6 +32,22 @@ optional arguments:
   -l, --log             log moves of game to logs/
 ```
 
+### 'test-output-moves.csv' dataset format:
+
+```
+[starter, moves..., winner]
+
+Starter: The first moves piece color that was randomly picked (1 or -1, for red/yellow)
+Moves: Integer made from array row/col of where the moves were placed ([5,5] = 55, [5,3] = 53, etc...)
+Winner: Winner of the game (1 or -1, for red/yellow)
+
+Example:
+
+[1],(55),53,50,45,43,33,56,51,40,30,35,54,44,34,25,52,{-1}
+
+[]: red went first, (): red first move 55, {}: yellow ended up winning
+```
+
 # TODO:
 
 * Add input to take in move and push to the board.
