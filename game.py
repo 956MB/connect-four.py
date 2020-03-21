@@ -4,18 +4,20 @@ from colorama import Fore, Style
 from bitmap import Bitmap
 
 class Game(object):
-    def __init__(self, blank=True, load=None, sep=" "):
+    def __init__(self, mode=True, load=None, sep=" ", starter=None):
         self.board = np.zeros((6,7), dtype=int)
+        self.starter = starter
         self.moves, self.load = [], load
         self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
         if sep == " ": self.front, self.middle, self.back = "", " ", ""
         elif sep == "|": self.front, self.middle, self.back = " {}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL), "", "{}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL)
         elif sep == "(": self.front, self.middle, self.back = " ", "{}{}{}".format(Fore.BLUE, "(", Style.RESET_ALL), "{}{}{}".format(Fore.BLUE, ")", Style.RESET_ALL)
-        if not blank: self.load_random_game()
+        if not mode: self.load_random_game()
 
-    def reset_game(self):
+    def reset_game(self, new_turn):
         self.board = np.zeros((6,7), dtype=int)
         self.moves = []
+        self.starter = new_turn
 
     def push_piece(self, piece):
         self.board[piece[0][0]][piece[0][1]] = piece[1]
@@ -70,21 +72,21 @@ class Game(object):
         if winner != 0: return winner
         return 0
 
-    def out_csv(self, winner, path):
+    def out_csv(self, winner, path, mode):
         # flat_board = self.board.flatten()
         flat_moves = [''.join(list(map(str, list(i)))) for i in self.moves]
 
-        # with open('custom-datasets/test-output-board.csv', 'a', newline='') as csvfile:
+        # with open(path, mode, newline='') as csvfile:
             # np.append(flat_board, winner)
             # writer = csv.writer(csvfile)
             # writer.writerow(flat_board)
             # print("board written to custom-datasets/test-output-board.csv")
 
-        with open('custom-datasets/test-output-moves.csv', 'a', newline='') as csvfile:
+        with open(path, mode, newline='') as csvfile:
+            flat_moves.insert(0, self.starter)
             flat_moves.append(winner)
             writer = csv.writer(csvfile)
             writer.writerow(flat_moves)
-            print("moves written to custom-datasets/test-output-moves.csv")
 
     def draw_board(self, cursor=[5,0], turn=1, winner=None):
         os.system('clear')
