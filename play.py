@@ -66,8 +66,6 @@ if __name__ == '__main__':
             help="path to .csv moves dataset to load random game")
     opt.add_argument("-s","--style",const=1,type=int,choices=range(1,4),nargs="?",
             help="style of Connect Four game. 1, 2 or 3.")
-    opt.add_argument("-i","--inputmode",action="store_true",
-            help="play game with input mode rather than with arrow key movement")
     opt.add_argument("-l","--log",action="store_true",
             help="log moves of game to logs/")
     ap._action_groups.append(opt)
