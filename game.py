@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*- 
+from __future__ import print_function
 import numpy as np
-import os, csv, sys, random
+import os, csv, sys
 from colorama import Fore, Style
 from bitmap import Bitmap
 
@@ -8,7 +10,7 @@ class Game(object):
         self.board = np.zeros((6,7), dtype=int)
         self.starter = starter
         self.moves, self.load = [], load
-        self.pieces = {0:f"{Fore.WHITE}{Style.DIM}●{Style.RESET_ALL}", 1:f"{Fore.RED}●{Style.RESET_ALL}", -1:f"{Fore.YELLOW}●{Style.RESET_ALL}"}
+        self.pieces = {0:"{}{}●{}".format(Fore.WHITE, Style.DIM, Style.RESET_ALL), 1:"{}●{}".format(Fore.RED, Style.RESET_ALL), -1:"{}●{}".format(Fore.YELLOW, Style.RESET_ALL)}
         if sep == " ": self.front, self.middle, self.back = "", " ", ""
         elif sep == "|": self.front, self.middle, self.back = " {}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL), "", "{}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL)
         elif sep == "(": self.front, self.middle, self.back = " ", "{}{}{}".format(Fore.BLUE, "(", Style.RESET_ALL), "{}{}{}".format(Fore.BLUE, ")", Style.RESET_ALL)
@@ -29,7 +31,7 @@ class Game(object):
     def load_random_game(self):
         with open(self.load, newline='') as file:
             reader = csv.reader(file)
-            file.seek(random.randrange(80000))
+            file.seek(np.random.randint(sum(1 for row in reader)))
             file.readline()
             random_game = file.readline()
             if len(random_game) == 0:
@@ -39,13 +41,14 @@ class Game(object):
             # random_game = np.reshape(random_game, (-1,7))
         # return random_game
 
-        turn = int(random_game.split(',')[-1].replace('\r\n', ''))
-        moves = random_game.split(',')[:-1]
+        turn = int(random_game.split(',')[0])
+        moves = random_game.split(',')[1:-1]
         moves = [list(map(int, list(i))) for i in moves]
         for place in moves:
             res = self.push_piece([place,turn])
             if res != 0: self.draw_board(place, turn, res)
             turn = -1 if turn == 1 else 1
+        self.draw_board(winner=0)
 
     def check_next_column(self, cursor, direction):
         skip = True
