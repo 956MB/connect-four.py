@@ -8,4 +8,8 @@ logs/*
 !data/.gitkeep
 !custom-datasets/.gitkeep
 !logs/.gitkeep
-train.py
+test.py
+get_training.py
+serial.py
+sockets/
+sockets2/

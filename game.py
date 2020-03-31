@@ -6,7 +6,7 @@ from colorama import Fore, Style
 from bitmap import Bitmap
 
 class Game(object):
-    def __init__(self, mode=True, load=None, sep=" ", starter=None):
+    def __init__(self, mode=True, load=None, sep=" ", starter=1):
         self.board = np.zeros((6,7), dtype=int)
         self.starter = starter
         self.moves, self.load = [], load
