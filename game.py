@@ -93,8 +93,8 @@ class Game(object):
             dl = [[cursor[0]+i, cursor[1]+i] for i in range(0, 4)]
             return dl
 
-        elif direction == '//':
-            dr = [[cursor[0]-i, cursor[1]-i] for i in range(0, 4)]
+        elif direction == '/':
+            dr = [[cursor[0]+i, cursor[1]-i] for i in range(0, 4)]
             return dr
 
     def out_csv(self, winner, path, mode):
