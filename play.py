@@ -6,6 +6,7 @@ import argparse
 
 def play_console():
     global cursor,turn
+
     four.draw_board(cursor, turn)
     try:
         while True:
@@ -14,23 +15,29 @@ def play_console():
                 lspot = four.check_next_column(cursor, "left")
                 cursor = lspot
                 four.draw_board(cursor, turn)
+
             elif k == 'right':
                 rspot = four.check_next_column(cursor, "right")
                 cursor = rspot
                 four.draw_board(cursor, turn)
+
             elif k == 'space':
                 win = four.push_piece([cursor,turn])
-                if win != 0:
+                if win[0] != 0:
                     if args["log"]:
                         now = datetime.now()
                         timestring = now.strftime("%m-%d-%Y-%H%M%S-moves")
                         four.out_csv(win, "logs/{}.csv".format(timestring), "w")
-                    four.draw_board(cursor, turn, win)
+
+                    winning_pieces = four.get_winning_position(cursor, win[0], win[1])
+                    four.draw_board(cursor, turn, win[0], winning_pieces)
+
                 four.draw_board(cursor, turn)
                 turn = -1 if turn == 1 else 1
             elif k == 'esc':
                 os.system('stty sane')
                 sys.exit()
+
     except (KeyboardInterrupt, SystemExit):
         os.system('stty sane')
 
@@ -51,6 +58,7 @@ def getkey():
                 67: 'right'
             }
             return key_mapping.get(k, chr(k))
+
     except Exception:
         sys.exit()
     finally:

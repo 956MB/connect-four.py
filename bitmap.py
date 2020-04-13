@@ -6,9 +6,9 @@ class Bitmap(object):
         int_red, int_yellow = self.shape(self.board, 1)
         red_win, yellow_win = self.connected_four(int_red), self.connected_four(int_yellow)
 
-        if red_win: return 1
-        elif yellow_win: return -1
-        else: return 0
+        if red_win[0]: return [1, red_win[1]]
+        elif yellow_win[0]: return [-1, yellow_win[1]]
+        else: return [0]
 
     def shape(self, board, player):
         opponent = -1 if player == 1 else 1
@@ -34,18 +34,18 @@ class Bitmap(object):
         # --
         m = position & (position >> 7)
         if m & (m >> 14):
-            return True
+            return True, '--'
         # \
         m = position & (position >> 6)
         if m & (m >> 12):
-            return True
+            return True, '\\'
         # /
         m = position & (position >> 8)
         if m & (m >> 16):
-            return True
+            return True, '/'
         # |
         m = position & (position >> 1)
         if m & (m >> 2):
-            return True
+            return True, '|'
 
-        return False
+        return [False]

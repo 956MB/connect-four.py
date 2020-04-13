@@ -2,7 +2,6 @@
 from __future__ import print_function
 import numpy as np
 import os, csv, sys
-from colorama import Fore, Style
 from bitmap import Bitmap
 
 class Game(object):
@@ -10,10 +9,10 @@ class Game(object):
         self.board = np.zeros((6,7), dtype=int)
         self.starter = starter
         self.moves, self.load = [], load
-        self.pieces = {0:"{}{}●{}".format(Fore.WHITE, Style.DIM, Style.RESET_ALL), 1:"{}●{}".format(Fore.RED, Style.RESET_ALL), -1:"{}●{}".format(Fore.YELLOW, Style.RESET_ALL)}
+        self.pieces = {0:"\033[90m●\033[0m", 1:"\033[31m●\033[0m", -1:"\033[93m●\033[0m"}
         if sep == " ": self.front, self.middle, self.back = "", " ", ""
-        elif sep == "|": self.front, self.middle, self.back = " {}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL), "", "{}{}{}".format(Fore.BLUE, "|", Style.RESET_ALL)
-        elif sep == "(": self.front, self.middle, self.back = " ", "{}{}{}".format(Fore.BLUE, "(", Style.RESET_ALL), "{}{}{}".format(Fore.BLUE, ")", Style.RESET_ALL)
+        elif sep == "|": self.front, self.middle, self.back = " \033[34m|\033[0m", "", "\033[34m|\033[0m"
+        elif sep == "(": self.front, self.middle, self.back = " ", "\033[34m(\033[0m", "\033[34m)\033[0m"
         if not mode: self.load_random_game()
 
     def reset_game(self, new_turn):
@@ -25,8 +24,8 @@ class Game(object):
         self.board[piece[0][0]][piece[0][1]] = piece[1]
         self.moves.append(tuple(piece[0]))
         win = self.check_winner()
-        if win != 0: return win
-        return 0
+        if win[0] != 0: return win
+        return [0]
 
     def load_random_game(self):
         with open(self.load, newline='') as file:
@@ -46,9 +45,9 @@ class Game(object):
         moves = [list(map(int, list(i))) for i in moves]
         for place in moves:
             res = self.push_piece([place,turn])
-            if res != 0: self.draw_board(place, turn, res)
+            if res[0] != 0: self.draw_board(place, turn, res[0])
             turn = -1 if turn == 1 else 1
-        self.draw_board(winner=0)
+        self.draw_board(winner=res[0])
 
     def check_next_column(self, cursor, direction):
         skip = True
@@ -72,8 +71,31 @@ class Game(object):
 
     def check_winner(self):
         winner = Bitmap(self.board.flatten()).check_winner()
-        if winner != 0: return winner
-        return 0
+        if winner[0] != 0: return winner
+        return [0]
+    
+    def get_winning_position(self, cursor, winner, direction):
+        if direction == '--':
+            for i in range(0, 4):
+                h = [[cursor[0], i] for i in range(i, i+4)]
+                nums = [self.board[i[0]][i[1]] for i in h]
+                if all(v == winner for v in nums):
+                    return h
+
+        elif direction == '|':
+            for i in range(0, 3):
+                v = [[i, cursor[1]] for i in range(i, i+4)]
+                nums = [self.board[i[0]][i[1]] for i in v]
+                if all(v == winner for v in nums):
+                    return v
+
+        elif direction == '\\':
+            dl = [[cursor[0]+i, cursor[1]+i] for i in range(0, 4)]
+            return dl
+
+        elif direction == '//':
+            dr = [[cursor[0]-i, cursor[1]-i] for i in range(0, 4)]
+            return dr
 
     def out_csv(self, winner, path, mode):
         # flat_board = self.board.flatten()
@@ -91,7 +113,7 @@ class Game(object):
             writer = csv.writer(csvfile)
             writer.writerow(flat_moves)
 
-    def draw_board(self, cursor=[5,0], turn=1, winner=None):
+    def draw_board(self, cursor=[5,0], turn=1, winner=None, winning_pieces=None):
         os.system('clear')
         print()
 
@@ -99,11 +121,17 @@ class Game(object):
             print("{}".format(self.front), end="")
             for col_index, item in enumerate(row):
                 current = [row_index, col_index]
-                if current == cursor:
-                    if winner: print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
-                    else: print("{}{}".format(self.middle, self.pieces[1]), end="{}".format(self.back)) if turn == 1 else print("{}{}".format(self.middle, self.pieces[-1]), end="{}".format(self.back))
+                if winning_pieces is None:
+                    if current == cursor:
+                        if winner: print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
+                        else: print("{}{}".format(self.middle, self.pieces[1]), end="{}".format(self.back)) if turn == 1 else print("{}{}".format(self.middle, self.pieces[-1]), end="{}".format(self.back))
+                    else:
+                        print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
                 else:
-                    print("{}{}".format(self.middle, self.pieces[item]), end="{}".format(self.back))
+                    if current in winning_pieces:
+                        print("{}{}".format(self.middle, self.pieces[winner]), end="{}".format(self.back))
+                    else:
+                        print("{}{}".format(self.middle, self.pieces[0]), end="{}".format(self.back))
             print()
 
         if winner is None:
