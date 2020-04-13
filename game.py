@@ -78,24 +78,30 @@ class Game(object):
         if direction == '--':
             for i in range(0, 4):
                 h = [[cursor[0], i] for i in range(i, i+4)]
-                nums = [self.board[i[0]][i[1]] for i in h]
-                if all(v == winner for v in nums):
+                if all(v == winner for v in [self.board[i[0]][i[1]] for i in h]):
                     return h
 
         elif direction == '|':
             for i in range(0, 3):
                 v = [[i, cursor[1]] for i in range(i, i+4)]
-                nums = [self.board[i[0]][i[1]] for i in v]
-                if all(v == winner for v in nums):
+                if all(v == winner for v in [self.board[i[0]][i[1]] for i in v]):
                     return v
 
         elif direction == '\\':
-            dl = [[cursor[0]+i, cursor[1]+i] for i in range(0, 4)]
-            return dl
+            for i in range(5-cursor[0]):
+                cursor[0], cursor[1] = cursor[0]+1, cursor[1]+1
+            for i in range(3):
+                dl = [[cursor[0]-i, cursor[1]-i] for i in range(0, 4)]
+                if all(v == winner for v in [self.board[i[0]][i[1]] for i in dl]): return dl
+                cursor[0], cursor[1] = cursor[0]-1, cursor[1]-1
 
         elif direction == '/':
-            dr = [[cursor[0]+i, cursor[1]-i] for i in range(0, 4)]
-            return dr
+            for i in range(5-cursor[0]):
+                cursor[0], cursor[1] = cursor[0]+1, cursor[1]-1
+            for i in range(3):
+                dr = [[cursor[0]-i, cursor[1]+i] for i in range(0, 4)]
+                if all(v == winner for v in [self.board[i[0]][i[1]] for i in dr]): return dr
+                cursor[0], cursor[1] = cursor[0]-1, cursor[1]+1
 
     def out_csv(self, winner, path, mode):
         # flat_board = self.board.flatten()
