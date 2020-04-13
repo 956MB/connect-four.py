@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from game import Game
-import random
+import random, sys
 
 def generate_game(games=1):
     global cursor,turn
@@ -25,4 +25,7 @@ def generate_game(games=1):
 if __name__ == '__main__':
     cursor, turn, res = [5,0], random.choice([-1, 1]), 0
     four = Game(mode=True, starter=turn)
-    generate_game(10)
+    try:
+        generate_game(sys.argv[1])
+    except IndexError:
+        print("game amount not given")
