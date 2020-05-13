@@ -16,11 +16,12 @@ ESC to exit.
 ```
 
 ```
-usage: play.py [-h] [-n] [-d DATASET] [-s [{1,2,3}]] [-i] [-l]
+usage: play.py [-h] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
 
 optional arguments:
   -h, --help            show this help message and exit
   -n, --net             play against trained neural net
+  -r, --random          play against random moves
   -d DATASET, --dataset DATASET
                         path to .csv moves dataset to load random game
   -s [{1,2,3}], --style [{1,2,3}]
