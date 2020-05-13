@@ -34,6 +34,12 @@ def play_console():
 
                 four.draw_board(cursor, turn)
                 turn = -1 if turn == 1 else 1
+
+                if play_random:
+                    four.pick_random(turn)
+                    turn = -1 if turn == 1 else 1
+                    four.draw_board(cursor, turn)
+
             elif k == 'esc':
                 os.system('stty sane')
                 sys.exit()
@@ -70,6 +76,8 @@ if __name__ == '__main__':
     req = ap.add_argument_group('required arguments')
     opt.add_argument("-n","--net",action="store_true",
             help="play against trained neural net")
+    opt.add_argument("-r","--random",action="store_true",
+            help="play against random moves")
     opt.add_argument("-d","--dataset",
             help="path to .csv moves dataset to load random game")
     opt.add_argument("-s","--style",const=1,type=int,choices=range(1,4),nargs="?",
@@ -79,9 +87,10 @@ if __name__ == '__main__':
     ap._action_groups.append(opt)
     args = vars(ap.parse_args())
 
-    mode, path, sep = True, None, " "
+    mode, path, sep, play_random = True, None, " ", False
     seperators = {1:" ", 2:"|", 3:"("}
     cursor, turn = [5,0], random.choice([-1, 1])
+    if args["random"]: play_random = True
     if args["style"]: sep = seperators[args["style"]]
     if args["dataset"]: mode, path = False, args["dataset"]
 

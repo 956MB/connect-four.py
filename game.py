@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 from __future__ import print_function
 import numpy as np
-import os, csv, sys
+import os, csv, sys, random
 from bitmap import Bitmap
 
 class Game(object):
@@ -36,9 +36,6 @@ class Game(object):
             if len(random_game) == 0:
                 f.seek(0)
                 random_game = f.readline()
-            # random_game = np.asarray([int(float(i)) for i in random_game.split(',')[:-1]])
-            # random_game = np.reshape(random_game, (-1,7))
-        # return random_game
 
         turn = int(random_game.split(',')[0])
         moves = random_game.split(',')[1:-1]
@@ -63,6 +60,25 @@ class Game(object):
             for i in col:
                 spot = self.board[i[0]][i[1]]
                 if spot == 0: return i
+
+    def pick_random(self, turn):
+        avaliable = self.get_open_cols()
+        x = random.choice(avaliable)
+        for y in range(5, 0, -1):
+            piece = [y, x]
+            spot = self.board[piece[0]][piece[1]]
+            if spot == 0:
+                win = self.push_piece([piece, turn])
+                if win[0] != 0:
+                    winning_pieces = four.get_winning_position(piece, win[0], win[1])
+                    four.draw_board(piece, turn, win[0], winning_pieces)
+                else:
+                    break
+
+    def get_open_cols(self):
+        cols = [[[i,x] for i in range(0,6)] for x in range(0,7)]
+        open_cols = [i for i in range(7) if not self.check_full(cols[i])]
+        return open_cols
 
     def check_full(self, column):
         items = [self.board[i[0]][i[1]] for i in column]
@@ -104,14 +120,7 @@ class Game(object):
                 cursor[0], cursor[1] = cursor[0]-1, cursor[1]+1
 
     def out_csv(self, winner, path, mode):
-        # flat_board = self.board.flatten()
         flat_moves = [''.join(list(map(str, list(i)))) for i in self.moves]
-
-        # with open(path, mode, newline='') as csvfile:
-            # np.append(flat_board, winner)
-            # writer = csv.writer(csvfile)
-            # writer.writerow(flat_board)
-            # print("board written to custom-datasets/test-output-board.csv")
 
         with open(path, mode, newline='') as csvfile:
             flat_moves.insert(0, self.starter)
