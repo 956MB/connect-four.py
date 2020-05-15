@@ -1,4 +1,4 @@
-# nn-connect-four
+# connect-four.py
 
 ```
 Cursor: [5, 0]
