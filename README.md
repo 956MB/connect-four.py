@@ -49,6 +49,9 @@ Example:
 
 * Finish implementing argument features for play.py:
     * --net
+    * --log, log things like total moves, red/yellow moves, time/date, win method
+
+* 
 
 # Looks:
 
