@@ -46,6 +46,7 @@ def play_console():
 
     except (KeyboardInterrupt, SystemExit):
         os.system('stty sane')
+        sys.exit()
 
 def getkey():
     old_settings = termios.tcgetattr(sys.stdin)
@@ -53,22 +54,14 @@ def getkey():
     try:
         while True:
             b = os.read(sys.stdin.fileno(), 3).decode()
-            if len(b) == 3:
-                k = ord(b[2])
-            else:
-                k = ord(b)
-            key_mapping = {
-                27: 'esc',
-                32: 'space',
-                68: 'left',
-                67: 'right'
-            }
+            if len(b) == 3: k = ord(b[2])
+            else: k = ord(b)
+
+            key_mapping = { 27:'esc', 32:'space', 68:'left', 67:'right' }
             return key_mapping.get(k, chr(k))
 
-    except Exception:
-        sys.exit()
-    finally:
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+    except Exception: sys.exit()
+    finally: termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
