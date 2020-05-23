@@ -1,25 +1,31 @@
 # connect-four.py
 
+[Board games collection repo](https://github.com/Bloumbs/board-games)
+
 ```
-Cursor: [5, 0]
                                             this is nothing
 . . . . . . .         . . . . . . .         ┌─┬─┬─┬─┬─┬─┬─┐
 . . . . . . .    │    . . . ● . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
-. . ● ○ . . .    │    . . ● ○ . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
-○ ● ○ ● . . .    │    ○ ● ○ ● . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
-● ○ ○ ○ ● . .    │    ● ○ ○ ○ ● . .    │    ├─┼─┼─┼─┼─┼─┼─┤
-● ○ ○ ● ● ○ ●         ● ○ ○ ● ● ○ ●         ├─┼─┼─┼─┼─┼─┼─┤
+. . ● ○ . . .    │    . . ● . . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
+○ ● ○ ● . . .    │    . ● . . . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
+● ○ ○ ○ ● . .    │    ● . . . . . .    │    ├─┼─┼─┼─┼─┼─┼─┤
+● ○ ○ ● ● ○ ●         . . . . . . .         ├─┼─┼─┼─┼─┼─┼─┤
                                             └─┴─┴─┴─┴─┴─┴─┘
-⭠  ⭢  to move.         WINNER: ●
+⭠ ⭢  to move.          WINNER: ●
 SPACE to select.
 ESC to exit.
 ```
 
+Usage:
+
 ```
-usage: play.py [-h] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
+usage: play.py [-h] [-V] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
+
+Play Connect Four in the terminal. Written in Python.
 
 optional arguments:
   -h, --help            show this help message and exit
+  -V, --version         show script version
   -n, --net             play against trained neural net
   -r, --random          play against random moves
   -d DATASET, --dataset DATASET
@@ -48,12 +54,9 @@ Example:
 # TODO:
 
 * Finish implementing argument features for play.py:
-    * --net
+    * --net, figure out neural net stuff to make moves in connect four. wow, difficult.
     * --log, log things like total moves, red/yellow moves, time/date, win method
 
-* 
-
-# Looks:
+# LOOKS:
 
 <img width="900" src="https://github.com/Bloumbs/nn-connect-four/blob/master/screenshots/looks.png">
-
