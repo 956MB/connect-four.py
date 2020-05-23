@@ -15,12 +15,10 @@ def play_console():
                 lspot = four.check_next_column(cursor, "left")
                 cursor = lspot
                 four.draw_board(cursor, turn)
-
             elif k == 'right':
                 rspot = four.check_next_column(cursor, "right")
                 cursor = rspot
                 four.draw_board(cursor, turn)
-
             elif k == 'space':
                 win = four.push_piece([cursor,turn])
                 if win[0] != 0:
@@ -64,25 +62,22 @@ def getkey():
     finally: termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description="Play Connect Four in the terminal. Written in Python.")
     opt = ap._action_groups.pop()
     req = ap.add_argument_group('required arguments')
-    opt.add_argument("-n","--net",action="store_true",
-            help="play against trained neural net")
-    opt.add_argument("-r","--random",action="store_true",
-            help="play against random moves")
-    opt.add_argument("-d","--dataset",
-            help="path to .csv moves dataset to load random game")
-    opt.add_argument("-s","--style",const=1,type=int,choices=range(1,4),nargs="?",
-            help="style of Connect Four game. 1, 2 or 3.")
-    opt.add_argument("-l","--log",action="store_true",
-            help="log moves of game to logs/")
+    opt.add_argument("-V","--version",action="store_true",help="show script version")
+    opt.add_argument("-n","--net",action="store_true",help="play against trained neural net")
+    opt.add_argument("-r","--random",action="store_true",help="play against random moves")
+    opt.add_argument("-d","--dataset",help="path to .csv moves dataset to load random game")
+    opt.add_argument("-s","--style",const=1,type=int,choices=range(1,4),nargs="?",help="style of Connect Four game. 1, 2 or 3.")
+    opt.add_argument("-l","--log",action="store_true",help="log moves of game to logs/")
     ap._action_groups.append(opt)
     args = vars(ap.parse_args())
 
     mode, path, sep, play_random = True, None, " ", False
     seperators = {1:" ", 2:"|", 3:"("}
     cursor, turn = [5,0], random.choice([-1, 1])
+    if args["version"]: sys.exit("v1.0.0")
     if args["random"]: play_random = True
     if args["style"]: sep = seperators[args["style"]]
     if args["dataset"]: mode, path = False, args["dataset"]
