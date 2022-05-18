@@ -18,7 +18,7 @@ ESC to exit.
 
 Usage:
 
-```
+```shell
 usage: connect-four.py [-h] [-V] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
 
 Play Connect Four in the terminal. Written in Python.
