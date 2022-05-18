@@ -1,6 +1,6 @@
 # connect-four.py
 
-[Board games collection repo](https://github.com/Bloumbs/board-games)
+[Board games collection repo](https://github.com/956MB/board-games)
 
 ```
                                             this is nothing
@@ -19,7 +19,7 @@ ESC to exit.
 Usage:
 
 ```
-usage: play.py [-h] [-V] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
+usage: connect-four.py [-h] [-V] [-n] [-r] [-d DATASET] [-s [{1,2,3}]] [-l]
 
 Play Connect Four in the terminal. Written in Python.
 
@@ -59,4 +59,4 @@ Example:
 
 # LOOKS:
 
-<img width="900" src="https://github.com/Bloumbs/nn-connect-four/blob/master/screenshots/looks.png">
+<img width="900" src="screenshots/looks.png">
